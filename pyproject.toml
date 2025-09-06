@@ -1,0 +1,60 @@
+[project]
+name = "mpv_history_daemon"
+version = "0.2.6"
+description = "Daemon which connects to active mpv instances, saving a history of what I watch/listen to"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: End Users/Desktop",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "click>=8.1",
+  "logzero",
+  "python-mpv-jsonipc",
+  "simplejson",
+  "kompress",
+]
+[[project.authors]]
+name = "purarue"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+mpv-history-daemon = "mpv_history_daemon.__main__:cli"
+
+[project.urls]
+Homepage = "https://github.com/purarue/mpv_history_daemon"
+
+[project.optional-dependencies]
+optional = ["orjson"]
+testing = ["flake8", "mypy"]
+
+[tool.mypy]
+pretty = "True"
+disallow_any_generics = "False"
+show_error_context = "True"
+show_error_codes = "True"
+namespace_packages = "True"
+disallow_subclassing_any = "True"
+disallow_incomplete_defs = "True"
+no_implicit_optional = "True"
+warn_redundant_casts = "True"
+warn_return_any = "True"
+warn_unreachable = "True"
+check_untyped_defs = "True"
+disallow_untyped_calls = "True"
+
+[tool.setuptools.packages.find]
+include = ["mpv_history_daemon"]
