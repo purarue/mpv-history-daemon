@@ -4,7 +4,8 @@ import shutil
 import logging
 import importlib
 from pathlib import Path
-from typing import Any, Sequence, Iterator, Optional, Union, Literal
+from typing import Any, Optional, Union, Literal
+from collections.abc import Sequence, Iterator
 from tempfile import gettempdir
 from kompress import CPath
 
@@ -24,7 +25,6 @@ def cli():
     """
     Connects to mpv socket files and saves a history of events
     """
-    pass
 
 
 def _parse_polling(

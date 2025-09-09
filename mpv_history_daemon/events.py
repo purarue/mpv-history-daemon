@@ -9,18 +9,13 @@ from itertools import chain
 from datetime import datetime, timezone
 from pathlib import Path, PurePath
 from typing import (
-    Iterator,
-    Sequence,
-    List,
     NamedTuple,
-    Set,
     Any,
-    Dict,
-    Tuple,
     Optional,
     Union,
     Callable,
 )
+from collections.abc import Iterator, Sequence
 
 from logzero import setup_logger  # type: ignore[import]
 
@@ -59,8 +54,8 @@ class Media(NamedTuple):
     # title of the media (if URL, could be <title>...</title> from ytdl
     media_title: Optional[str]
     # additional metadata on what % I was through the media while pausing/playing/seeking
-    actions: List[Action]
-    metadata: Dict[str, Any]  # metadata from the file, if it exists
+    actions: list[Action]
+    metadata: dict[str, Any]  # metadata from the file, if it exists
 
     @property
     def score(self) -> float:
@@ -142,7 +137,7 @@ def _read_event_stream(
     # sometimes youtube-dl will show up twice ...?
     # use 'path' as a primary key to remove possible
     # duplicate event data
-    items: Dict[str, Media] = {}
+    items: dict[str, Media] = {}
     for d in _reconstruct_event_stream(
         events, filename=filename, allow_if_playing_for=allow_if_playing_for
     ):
@@ -187,14 +182,12 @@ def _read_event_stream(
     yield from list(items.values())
 
 
-REQUIRED_KEYS = set(["playlist_pos", "start_time", "path"])
+REQUIRED_KEYS = {"playlist_pos", "start_time", "path"}
 
-IGNORED_EVENTS: Set[EventType] = set(
-    [
+IGNORED_EVENTS: set[EventType] = {
         "playlist",
         "playlist-count",
-    ]
-)
+}
 
 
 URL_REGEX = re.compile(
@@ -218,7 +211,7 @@ homedir = os.path.expanduser("~")
 
 def _reconstruct_event_stream(
     events: Any, filename: str, *, allow_if_playing_for: int
-) -> Iterator[Dict[str, Any]]:
+) -> Iterator[dict[str, Any]]:
     """
     Takes about a dozen events received chronologically from the MPV
     socket, and reconstructs what I was doing while it was playing.
@@ -238,7 +231,7 @@ def _reconstruct_event_stream(
         logger.warning("Using 'socket-added' event time instead of filename")
 
     # dictionary for storing data while we parse though events
-    media_data: Dict[str, Any] = {}
+    media_data: dict[str, Any] = {}
 
     # 'globals', set at the beginning
     working_dir = homedir
@@ -250,7 +243,7 @@ def _reconstruct_event_stream(
     is_playing = True  # assume playing at beginning
     pause_duration = 0.0  # pause duration for this entry
     pause_start_time: Optional[float] = None  # if the entry is paused, when it started
-    actions: Dict[float, Tuple[str, float]] = {}
+    actions: dict[float, tuple[str, float]] = {}
 
     # a heuristic to determine if this is an old file, is-paused can be useful
     # to help dedupe incorrect 'resumed' events that happen when a socket first connects
@@ -446,7 +439,7 @@ def _reconstruct_event_stream(
         # a corrupted file, its one that didn't have an eof/had events
         # after an eof for some reason
         if not REQUIRED_KEYS.issubset(set(media_data)):
-            logger.debug("Ignoring leftover data... {}".format(media_data))
+            logger.debug(f"Ignoring leftover data... {media_data}")
         else:
             # if we got through all the keys, and this has been playing for at least a minute (or allow_if_playing_for)
             # even though this is sorta broken, log it anyways
@@ -457,7 +450,7 @@ def _reconstruct_event_stream(
                         most_recent_time - pause_start_time
                     )
                 logger.debug(
-                    "slightly broken, but yielding anyways... {}".format(media_data)
+                    f"slightly broken, but yielding anyways... {media_data}"
                 )
                 media_data["end_time"] = most_recent_time
                 media_data["pause_duration"] = pause_duration

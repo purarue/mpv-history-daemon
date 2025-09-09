@@ -7,7 +7,7 @@ As these have no dependencies, locating it here makes it easier to use in lots o
 import os
 import logging
 from urllib.parse import urlparse
-from typing import Dict, Optional, Any, NamedTuple, List
+from typing import Optional, Any, NamedTuple
 
 from .events import Media
 
@@ -19,7 +19,7 @@ class MusicMetadata(NamedTuple):
 
 
 def music_parse_metadata_from_blob(
-    data: Dict[str, Any],
+    data: dict[str, Any],
     strip_whitespace: bool = False,
 ) -> Optional[MusicMetadata]:
     if "title" not in data or "album" not in data or "artist" not in data:
@@ -54,10 +54,10 @@ class MediaAllowed:
     def __init__(
         self,
         *,
-        allow_prefixes: Optional[List[str]] = None,
-        ignore_prefixes: Optional[List[str]] = None,
-        allow_extensions: Optional[List[str]] = None,
-        ignore_extensions: Optional[List[str]] = None,
+        allow_prefixes: Optional[list[str]] = None,
+        ignore_prefixes: Optional[list[str]] = None,
+        allow_extensions: Optional[list[str]] = None,
+        ignore_extensions: Optional[list[str]] = None,
         allow_stream: bool = False,
         strict: bool = True,
         logger: Optional[logging.Logger] = None,
@@ -100,7 +100,7 @@ class MediaAllowed:
         return ext
 
     @classmethod
-    def default_ignore(cls) -> List[str]:
+    def default_ignore(cls) -> list[str]:
         return ["/tmp", "/dev"]
 
     def is_allowed(self, media: Media) -> bool:

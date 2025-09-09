@@ -19,7 +19,7 @@ import atexit
 import threading
 import signal
 from pathlib import Path
-from typing import List, Optional, Dict, Any, Type
+from typing import Optional, Any
 from time import sleep, time
 
 from python_mpv_jsonipc import MPV  # type: ignore[import]
@@ -30,8 +30,7 @@ from .serialize import dump_json
 SCAN_TIME: int = int(os.environ.get("MPV_HISTORY_DAEMON_SCAN_TIME", 10))
 
 
-KNOWN_EVENTS = set(
-    [
+KNOWN_EVENTS = {
         "socket-added",  # custom event, for when the socket was added
         "mpv-quit",
         "playlist-count",
@@ -47,11 +46,10 @@ KNOWN_EVENTS = set(
         "path",
         "working-directory",
         "final-write",  # custom event, for when the dead/dangling socket was removed, and file was written
-    ]
-)
+}
 
 
-def new_event(event_name: str, event_data: Any = None) -> Dict[str, Any]:
+def new_event(event_name: str, event_data: Any = None) -> dict[str, Any]:
     """
     helper to create an event. validates the event name
     """
@@ -61,7 +59,7 @@ def new_event(event_name: str, event_data: Any = None) -> Dict[str, Any]:
 
 
 # disabled for now
-def clean_playlist(mpv_playlist_response: List[Dict]) -> List[str]:
+def clean_playlist(mpv_playlist_response: list[dict]) -> list[str]:
     """
     simplifies the playlist response from mpv
     from:
@@ -69,7 +67,7 @@ def clean_playlist(mpv_playlist_response: List[Dict]) -> List[str]:
     to:
         ['01 Donuts (Outro).mp3', ...]
     """
-    filenames: List[str] = []
+    filenames: list[str] = []
     for pinfo in mpv_playlist_response:
         if "filename" not in pinfo:
             logger.warning(f"No filename in playlist info!: {pinfo}")
@@ -110,7 +108,7 @@ class SocketData:
         self.socket_loc = socket_loc
         self.data_dir = data_dir
         self.socket_time = socket_loc.split("/")[-1]
-        self.events: Dict[float, Dict] = {}
+        self.events: dict[float, dict] = {}
         self.write_period = write_period if write_period is not None else 600
         # write every 10 minutes, even if mpv doesn't exit
         self.write_at = time() + self.write_period
@@ -282,16 +280,16 @@ class LoopHandler:
         autostart: bool = True,
         write_period: Optional[int],
         poll_time: Optional[int] = 10,
-        socket_data_cls: Type[SocketData] = SocketData,
+        socket_data_cls: type[SocketData] = SocketData,
     ):
         self.data_dir: str = data_dir
         self.socket_dir: str = socket_dir
         self.write_period = write_period
         self._socket_dir_path: Path = Path(socket_dir).expanduser().absolute()
-        self.sockets: Dict[str, MPV] = {}
+        self.sockets: dict[str, MPV] = {}
         self.socket_data_cls = socket_data_cls
         self.poll_time = poll_time
-        self.socket_data: Dict[str, SocketData] = {}
+        self.socket_data: dict[str, SocketData] = {}
         self.waiting = threading.Event()
         self.setup_signal_handler()
         if autostart:
@@ -500,7 +498,7 @@ def run(
     data_dir: str,
     log_file: str,
     write_period: Optional[int],
-    socket_data_cls: Type[SocketData],
+    socket_data_cls: type[SocketData],
     poll_time: Optional[int],
 ) -> None:
     # if the daemon launched before any mpv instances

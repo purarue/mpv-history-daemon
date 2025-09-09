@@ -1,31 +1,31 @@
 import time
 from pathlib import Path
-from typing import List, Any, Dict, NamedTuple
+from typing import Any, NamedTuple
 
 from .events import logger
 from .serialize import parse_json_file
 
 
-def _is_merged_data(data: Dict[Any, Any]) -> bool:
+def _is_merged_data(data: dict[Any, Any]) -> bool:
     assert isinstance(data, dict), f"{data}"
     # top-level mapping key to indicate this is a merged datafile
     return "mapping" in data
 
 
 class MergeResult(NamedTuple):
-    merged_data: Dict[str, Any]
-    consumed_files: List[Path]
+    merged_data: dict[str, Any]
+    consumed_files: list[Path]
 
 
-def merge_files(files: List[Path], mtime_seconds_since: int = 3600) -> MergeResult:
+def merge_files(files: list[Path], mtime_seconds_since: int = 3600) -> MergeResult:
     """
     files can be either merged files, event files or a combination
     mtime_seconds_since makes sure were not writing to files that were
     recently modified
     """
-    merged_files: Dict[Path, Dict[Any, Any]] = {}
-    event_files: List[Path] = []
-    consumed_files: List[Path] = []
+    merged_files: dict[Path, dict[Any, Any]] = {}
+    event_files: list[Path] = []
+    consumed_files: list[Path] = []
     for f in files:
         data = parse_json_file(f)
         if _is_merged_data(data):
