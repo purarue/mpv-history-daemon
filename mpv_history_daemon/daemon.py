@@ -31,21 +31,21 @@ SCAN_TIME: int = int(os.environ.get("MPV_HISTORY_DAEMON_SCAN_TIME", 10))
 
 
 KNOWN_EVENTS = {
-        "socket-added",  # custom event, for when the socket was added
-        "mpv-quit",
-        "playlist-count",
-        "is-paused",
-        "eof",
-        "seek",
-        "paused",
-        "resumed",
-        "metadata",
-        "duration",
-        "playlist-pos",
-        "media-title",
-        "path",
-        "working-directory",
-        "final-write",  # custom event, for when the dead/dangling socket was removed, and file was written
+    "socket-added",  # custom event, for when the socket was added
+    "mpv-quit",
+    "playlist-count",
+    "is-paused",
+    "eof",
+    "seek",
+    "paused",
+    "resumed",
+    "metadata",
+    "duration",
+    "playlist-pos",
+    "media-title",
+    "path",
+    "working-directory",
+    "final-write",  # custom event, for when the dead/dangling socket was removed, and file was written
 }
 
 

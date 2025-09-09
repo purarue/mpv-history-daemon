@@ -185,8 +185,8 @@ def _read_event_stream(
 REQUIRED_KEYS = {"playlist_pos", "start_time", "path"}
 
 IGNORED_EVENTS: set[EventType] = {
-        "playlist",
-        "playlist-count",
+    "playlist",
+    "playlist-count",
 }
 
 
@@ -449,9 +449,7 @@ def _reconstruct_event_stream(
                     pause_duration = pause_duration + (
                         most_recent_time - pause_start_time
                     )
-                logger.debug(
-                    f"slightly broken, but yielding anyways... {media_data}"
-                )
+                logger.debug(f"slightly broken, but yielding anyways... {media_data}")
                 media_data["end_time"] = most_recent_time
                 media_data["pause_duration"] = pause_duration
                 media_data["actions"] = actions
