@@ -121,8 +121,14 @@ As an example:
   "media_duration": 67.578776,
   "media_title": "04 - Madvillain - Bistro.mp3",
   "percents": [
-    [1614905960, 11.150022],
-    [1614905981, 11.151141]
+    [
+      1614905960,
+      11.150022
+    ],
+    [
+      1614905981,
+      11.151141
+    ]
   ],
   "metadata": {}
 }
@@ -131,19 +137,29 @@ As an example:
 This can also be called from python:
 
 ```python
->>> from pathlib import Path
->>> from mpv_history_daemon.events import history
->>> list(history([Path("1611383220380934268.json")]))
+from pathlib import Path
+from mpv_history_daemon.events import history
+
+list(history([Path("1611383220380934268.json")]))
 [
-  Media(path='/home/data/media/music/MF DOOM/Madvillain - Madvillainy/05 - Madvillain - Raid [feat. M.E.D. aka Medaphoar].mp3',
-  is_stream=False,
-  start_time=datetime.datetime(2021, 1, 23, 6, 27, tzinfo=datetime.timezone.utc),
-  end_time=datetime.datetime(2021, 1, 23, 6, 29, 30, tzinfo=datetime.timezone.utc),
-  pause_duration=0.0,
-  media_duration=150.569796,
-  media_title='Raid [feat. M.E.D. aka Medaphoar]',
-  percents=[(datetime.datetime(2021, 1, 23, 6, 27, 2, tzinfo=datetime.timezone.utc), 1.471624)]
-  metadata={})
+    Media(
+        path="/home/data/media/music/MF DOOM/Madvillain - Madvillainy/05 - Madvillain - Raid [feat. M.E.D. aka Medaphoar].mp3",
+        is_stream=False,
+        start_time=datetime.datetime(2021, 1, 23, 6, 27, tzinfo=datetime.timezone.utc),
+        end_time=datetime.datetime(
+            2021, 1, 23, 6, 29, 30, tzinfo=datetime.timezone.utc
+        ),
+        pause_duration=0.0,
+        media_duration=150.569796,
+        media_title="Raid [feat. M.E.D. aka Medaphoar]",
+        percents=[
+            (
+                datetime.datetime(2021, 1, 23, 6, 27, 2, tzinfo=datetime.timezone.utc),
+                1.471624,
+            )
+        ],
+        metadata={},
+    )
 ]
 ```
 
