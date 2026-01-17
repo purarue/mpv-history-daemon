@@ -19,7 +19,7 @@ import atexit
 import threading
 import signal
 from pathlib import Path
-from typing import Optional, Any
+from typing import Any
 from time import sleep, time
 
 from python_mpv_jsonipc import MPV  # type: ignore[import]

@@ -4,7 +4,7 @@ import shutil
 import logging
 import importlib
 from pathlib import Path
-from typing import Any, Optional, Union, Literal
+from typing import Any, Literal
 from collections.abc import Sequence, Iterator
 from tempfile import gettempdir
 from kompress import CPath

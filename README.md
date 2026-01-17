@@ -121,14 +121,8 @@ As an example:
   "media_duration": 67.578776,
   "media_title": "04 - Madvillain - Bistro.mp3",
   "percents": [
-    [
-      1614905960,
-      11.150022
-    ],
-    [
-      1614905981,
-      11.151141
-    ]
+    [1614905960, 11.150022],
+    [1614905981, 11.151141]
   ],
   "metadata": {}
 }

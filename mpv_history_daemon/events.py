@@ -11,8 +11,6 @@ from pathlib import Path, PurePath
 from typing import (
     NamedTuple,
     Any,
-    Optional,
-    Union,
 )
 from collections.abc import Callable
 from collections.abc import Iterator, Sequence
