@@ -21,7 +21,7 @@ class MusicMetadata(NamedTuple):
 def music_parse_metadata_from_blob(
     data: dict[str, Any],
     strip_whitespace: bool = False,
-) -> Optional[MusicMetadata]:
+) -> MusicMetadata | None:
     if "title" not in data or "album" not in data or "artist" not in data:
         return None
     title = data["title"]
@@ -54,13 +54,13 @@ class MediaAllowed:
     def __init__(
         self,
         *,
-        allow_prefixes: Optional[list[str]] = None,
-        ignore_prefixes: Optional[list[str]] = None,
-        allow_extensions: Optional[list[str]] = None,
-        ignore_extensions: Optional[list[str]] = None,
+        allow_prefixes: list[str] | None = None,
+        ignore_prefixes: list[str] | None = None,
+        allow_extensions: list[str] | None = None,
+        ignore_extensions: list[str] | None = None,
         allow_stream: bool = False,
         strict: bool = True,
-        logger: Optional[logging.Logger] = None,
+        logger: logging.Logger | None = None,
     ):
         self.allow_prefixes = allow_prefixes if allow_prefixes else []
         self.ignored_prefixes = ignore_prefixes if ignore_prefixes else []

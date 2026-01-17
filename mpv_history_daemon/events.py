@@ -13,8 +13,8 @@ from typing import (
     Any,
     Optional,
     Union,
-    Callable,
 )
+from collections.abc import Callable
 from collections.abc import Iterator, Sequence
 
 from logzero import setup_logger  # type: ignore[import]
@@ -29,7 +29,7 @@ EventType = str
 EventData = Any
 
 
-def parse_datetime_sec(d: Union[str, float, int]) -> datetime:
+def parse_datetime_sec(d: str | float | int) -> datetime:
     return datetime.fromtimestamp(float(d), tz=timezone.utc)
 
 
@@ -41,7 +41,7 @@ class Action(NamedTuple):
     since_started: float
     action: str
     # this can be None if its a livestream, those dont have a percent-pos
-    percentage: Optional[float]
+    percentage: float | None
 
 
 class Media(NamedTuple):
@@ -50,9 +50,9 @@ class Media(NamedTuple):
     start_time: datetime  # when the media started playing
     end_time: datetime  # when the media was closed/finished
     pause_duration: float  # how long the media was paused for (typically 0)
-    media_duration: Optional[float]  # length of the media
+    media_duration: float | None  # length of the media
     # title of the media (if URL, could be <title>...</title> from ytdl
-    media_title: Optional[str]
+    media_title: str | None
     # additional metadata on what % I was through the media while pausing/playing/seeking
     actions: list[Action]
     metadata: dict[str, Any]  # metadata from the file, if it exists
@@ -147,7 +147,7 @@ def _read_event_stream(
             continue
         if d["end_time"] < d["start_time"]:
             logger.warning(f"End time is less than start time! {d}")
-        fdur: Optional[float] = None
+        fdur: float | None = None
         if "duration" in d:
             fdur = float(d["duration"])
         start_time = parse_datetime_sec(float(d["start_time"]))
@@ -223,7 +223,7 @@ def _reconstruct_event_stream(
     # exec "$mpv_path" "${mpv_options[@]}"
     #
     # get when mpv launched from the filename
-    start_time: Optional[float] = None
+    start_time: float | None = None
     try:
         start_time = float(int(PurePath(filename).stem) / 1e9)
     except ValueError as ve:
@@ -242,7 +242,7 @@ def _reconstruct_event_stream(
     # used to help determine state
     is_playing = True  # assume playing at beginning
     pause_duration = 0.0  # pause duration for this entry
-    pause_start_time: Optional[float] = None  # if the entry is paused, when it started
+    pause_start_time: float | None = None  # if the entry is paused, when it started
     actions: dict[float, tuple[str, float]] = {}
 
     # a heuristic to determine if this is an old file, is-paused can be useful

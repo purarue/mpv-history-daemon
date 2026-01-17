@@ -102,7 +102,7 @@ class SocketData:
         socket: MPV,
         socket_loc: str,
         data_dir: str,
-        write_period: Optional[int] = None,
+        write_period: int | None = None,
     ):
         self.socket = socket
         self.socket_loc = socket_loc
@@ -159,7 +159,7 @@ class SocketData:
         ) as event_f:
             event_f.write(serialized)
 
-    def nevent(self, event_name: str, event_data: Optional[Any] = None) -> None:
+    def nevent(self, event_name: str, event_data: Any | None = None) -> None:
         """add an event"""
         ct = time()
         logger.debug(f"{self.socket_time}|{ct}|{event_name}|{event_data}")
@@ -278,8 +278,8 @@ class LoopHandler:
         data_dir: str,
         *,
         autostart: bool = True,
-        write_period: Optional[int],
-        poll_time: Optional[int] = 10,
+        write_period: int | None,
+        poll_time: int | None = 10,
         socket_data_cls: type[SocketData] = SocketData,
     ):
         self.data_dir: str = data_dir
@@ -299,7 +299,7 @@ class LoopHandler:
         """
         Look for any new sockets at socket_dir, remove any dead ones
         """
-        socket_loc_scoped: Optional[str] = None  # to access this after the try/except
+        socket_loc_scoped: str | None = None  # to access this after the try/except
         try:
             # iterate through all files
             for socket_name in os.listdir(self.socket_dir):
@@ -497,9 +497,9 @@ def run(
     socket_dir: str,
     data_dir: str,
     log_file: str,
-    write_period: Optional[int],
+    write_period: int | None,
     socket_data_cls: type[SocketData],
-    poll_time: Optional[int],
+    poll_time: int | None,
 ) -> None:
     # if the daemon launched before any mpv instances
     if not os.path.exists(socket_dir):

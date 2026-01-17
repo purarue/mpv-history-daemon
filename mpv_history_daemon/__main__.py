@@ -30,8 +30,8 @@ def cli():
 def _parse_polling(
     ctx: click.Context,
     param: click.Parameter,
-    value: Union[str, int],
-) -> Union[Literal["disabled"], int]:
+    value: str | int,
+) -> Literal["disabled"] | int:
     if value == "disabled":
         return "disabled"
     if isinstance(value, int):
@@ -78,9 +78,9 @@ def daemon(
     socket_dir: str,
     data_dir: str,
     log_file: str,
-    scan_time: Union[Literal["disabled"], int],
-    write_period: Optional[int],
-    socket_class_qualname: Optional[str],
+    scan_time: Literal["disabled"] | int,
+    write_period: int | None,
+    socket_class_qualname: str | None,
 ) -> None:
     """
     Socket dir is the directory with mpv sockets (/tmp/mpvsockets, probably)
@@ -177,7 +177,7 @@ def parse(data_files: Sequence[str], all_events: bool, debug: bool) -> None:
     help="If files have been modified in this amount of time, don't merge them",
 )
 def merge(
-    data_files: Sequence[str], move: Optional[Path], write_to: Path, mtime_seconds: int
+    data_files: Sequence[str], move: Path | None, write_to: Path, mtime_seconds: int
 ) -> None:
     """
     merges multiple files into a single merged event file
